@@ -10,6 +10,9 @@ jobs:
       - run:
           name: Run SonarQube Analysis
           command: sonar-scanner -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectVersion=${CIRCLE_SHA1}
+      - run:
+          name: Check Quality Gate
+          command: sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.qualitygate.wait=true
   build:
     docker:
       - image: cimg/node:18.16
@@ -31,7 +34,3 @@ workflows:
       - build:
           requires:
             - analyze
-          filters:
-            branches:
-              only:
-                - master
